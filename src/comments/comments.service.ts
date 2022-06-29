@@ -25,6 +25,10 @@ export class CommentsService {
       where: {
         postId,
       },
+      order: {
+        group: 'DESC',
+        groupOrder: 'ASC',
+      },
     });
 
     return new SelectCommentsDto(comments);
