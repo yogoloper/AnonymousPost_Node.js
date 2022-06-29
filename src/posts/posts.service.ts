@@ -14,8 +14,11 @@ export class PostsService {
     @InjectRepository(Post) private readonly postsRepository: Repository<Post>,
   ) {}
 
-  async getAll(): Promise<SelectPostsDto> {
-    const posts = await this.postsRepository.find();
+  async getAll(page: number = 1, size: number = 5): Promise<SelectPostsDto> {
+    const posts = await this.postsRepository.find({
+      take: size,
+      skip: size * (page - 1),
+    });
     return new SelectPostsDto(posts);
   }
 
@@ -36,7 +39,9 @@ export class PostsService {
     return;
   }
 
-  async deleteOneById(id: number): Promise<{ deleted: boolean; message?: string }> {
+  async deleteOneById(
+    id: number,
+  ): Promise<{ deleted: boolean; message?: string }> {
     await this.postsRepository.update(
       { id },
       {

@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { CreateCommentDto } from './dto/request/create-comment.dto';
 import { CommentsService } from './comments.service';
+import { query } from 'express';
 
 @Controller('posts/:postId/comments')
 export class CommentsController {
@@ -18,8 +19,10 @@ export class CommentsController {
   getAll(
     @Param('postId', ParseIntPipe) postId: number,
     @Body() comment: CreateCommentDto,
+    @Query('page') page: number,
+    @Query('size') size: number,
   ) {
-    return this.commentsService.getAll(postId);
+    return this.commentsService.getAll(postId, page, size);
   }
 
   @Post('/')

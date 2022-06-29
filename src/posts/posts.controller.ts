@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatedPostDto } from './dto/response/created-post.dto';
@@ -20,8 +21,11 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Get('/')
-  getAll(): Promise<SelectPostsDto> {
-    return this.postsService.getAll();
+  getAll(
+    @Query('page') page: number,
+    @Query('size') size: number,
+  ): Promise<SelectPostsDto> {
+    return this.postsService.getAll(page, size);
   }
 
   @Get('/:id')

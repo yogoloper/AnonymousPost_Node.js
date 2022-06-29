@@ -16,7 +16,11 @@ export class CommentsService {
     private readonly postsRepository: Repository<Post>,
   ) {}
 
-  async getAll(postId: number): Promise<SelectCommentsDto> {
+  async getAll(
+    postId: number,
+    page: number = 1,
+    size: number = 5,
+  ): Promise<SelectCommentsDto> {
     const post = await this.postsRepository.findOneByOrFail({
       id: postId,
       status: 0,
@@ -29,6 +33,8 @@ export class CommentsService {
         group: 'DESC',
         groupOrder: 'ASC',
       },
+      take: size,
+      skip: size * (page - 1),
     });
 
     return new SelectCommentsDto(comments);
