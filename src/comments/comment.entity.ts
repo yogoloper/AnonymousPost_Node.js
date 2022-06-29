@@ -23,9 +23,21 @@ export class Comment extends BaseEntity {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => Post, (post) => post.id)
-  post: Post;
+  @Column()
+  group: number;
+
+  @Column({ default: 0})
+  step: number;
+
+  @Column({ default:0})
+  groupOrder: number;
+
+  @Column()
+  postId: number;
 
   @ManyToOne(() => Comment, (comment) => comment.id)
   parent: Comment;
+
+  @ManyToOne(() => Post, (post) => post.id)
+  post: Post;
 }
