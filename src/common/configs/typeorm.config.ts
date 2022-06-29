@@ -1,7 +1,7 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 
-ConfigModule.forRoot({ isGlobal: true });
+ConfigModule.forRoot();
 
 export const typeORMConfig: TypeOrmModuleOptions = {
   type: 'mysql',
