@@ -5,10 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  Brackets,
-  Repository,
-} from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 import { Post } from './entities/post.entity';
 import { CreatePostDto } from './dto/request/create-post.dto';
 import { CreatedPostDto } from './dto/response/created-post.dto';
@@ -58,8 +55,16 @@ export class PostsService {
 
   // 특정 게시물 조회
   async getOneById(id: number): Promise<SelectPostDto> {
-    const post = await this.postsRepository.findOneByOrFail({ id, status: 0 });
+    const post = await this.postsRepository.findOne({
+      where: { id, status: 0 },
+    });
 
+    if (!post) {
+      throw new NotFoundException({
+        errorNo: 'P0001',
+        message: '해당 게시물이 존재하지 않습니다.',
+      });
+    }
     return new SelectPostDto(post);
   }
 
@@ -90,7 +95,7 @@ export class PostsService {
       });
     } catch (err) {
       throw new InternalServerErrorException({
-        errorNo: 'P0001',
+        errorNo: 'P0002',
         message: '처리 중에 예기치 않은 오류가 발생하였습니다.',
       });
     }
@@ -111,7 +116,7 @@ export class PostsService {
     // 게시물 없을 경우 예외처리
     if (!orgPost) {
       throw new NotFoundException({
-        errorNo: 'P0002',
+        errorNo: 'P0003',
         message: '해당 게시물이 존재하지 않습니다.',
       });
     }
@@ -119,7 +124,7 @@ export class PostsService {
     // 비밀번호 불일치 예외처리
     if (orgPost.password != post.password) {
       throw new UnauthorizedException({
-        errorNo: 'P0003',
+        errorNo: 'P0004',
         message: '해당 게시물에 대한 수정 권한이 없습니다.',
       });
     }
@@ -129,7 +134,7 @@ export class PostsService {
       await this.postsRepository.update({ id }, post);
     } catch (err) {
       throw new InternalServerErrorException({
-        errorNo: 'P0004',
+        errorNo: 'P0005',
         message: '처리 중에 예기치 않은 오류가 발생하였습니다.',
       });
     }
@@ -152,7 +157,7 @@ export class PostsService {
     // 게시물이 없을 경우 예외처리
     if (!orgPost) {
       throw new NotFoundException({
-        errorNo: 'P0005',
+        errorNo: 'P0006',
         message: '해당 게시물이 존재하지 않습니다.',
       });
     }
@@ -160,7 +165,7 @@ export class PostsService {
     // 비밀번호 불일치 예외처리
     if (orgPost.password != post.password) {
       throw new UnauthorizedException({
-        errorNo: 'P0006',
+        errorNo: 'P0007',
         message: '해당 게시물에 대한 삭제 권한이 없습니다.',
       });
     }
@@ -173,7 +178,7 @@ export class PostsService {
       );
     } catch (err) {
       throw new InternalServerErrorException({
-        errorNo: 'P0007',
+        errorNo: 'P0008',
         message: '처리 중에 예기치 않은 오류가 발생하였습니다.',
       });
     }
