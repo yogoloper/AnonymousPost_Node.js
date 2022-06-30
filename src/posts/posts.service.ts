@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 import { Post } from './entities/post.entity';
 import { CreatePostDto } from './dto/request/create-post.dto';
 import { CreatedPostDto } from './dto/response/created-post.dto';
 import { SelectPostDto } from './dto/response/select-post.dto';
 import { SelectPostsDto } from './dto/response/select-posts.dto';
 import { UpdatePostDto } from './dto/request/update-post.dto';
+import { query } from 'express';
 
 @Injectable()
 export class PostsService {
@@ -19,13 +20,23 @@ export class PostsService {
     size: number = 5,
     search?,
   ): Promise<SelectPostsDto> {
-    const posts = await this.postsRepository
+    const query = this.postsRepository
       .createQueryBuilder()
       .take(size)
       .skip(size * (page - 1))
-      .where('title like :search', { search: `%${search}%` })
-      .orWhere('author like :search', { search: `%${search}%` })
-      .getMany();
+      .where('status = 0');
+
+    if (search != null) {
+      query.andWhere(
+        new Brackets((posts) => {
+          posts
+            .andWhere('title like :search', { search: `%${search}%` })
+            .orWhere('author like :search', { search: `%${search}%` });
+        }),
+      );
+    }
+
+    const posts = await query.getMany();
 
     return new SelectPostsDto(posts);
   }
