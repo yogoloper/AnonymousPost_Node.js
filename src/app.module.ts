@@ -5,6 +5,7 @@ import { typeORMConfig } from './common/configs/typeorm.config';
 import { PostsModule } from './posts/posts.module';
 import { CommentsModule } from './comments/comments.module';
 import { NoticesModule } from './notices/notices.module';
+import { KeywordsModule } from './keywords/keywords.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { NoticesModule } from './notices/notices.module';
     PostsModule,
     CommentsModule,
     NoticesModule,
+    KeywordsModule,
   ],
   controllers: [],
   providers: [],
