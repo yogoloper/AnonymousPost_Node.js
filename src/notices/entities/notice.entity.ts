@@ -5,7 +5,6 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  ManyToOne,
 } from 'typeorm';
 import { Comment } from 'src/comments/entities/comment.entity';
 import { Keyword } from 'src/keywords/entities/keyword.entity';

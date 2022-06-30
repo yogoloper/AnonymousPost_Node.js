@@ -48,7 +48,10 @@ export class PostsController {
   }
 
   @Delete('/:id')
-  deleteOneById(@Param('id', ParseIntPipe) id: number) {
-    return this.postsService.deleteOneById(id);
+  deleteOneById(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() post: UpdatePostDto,
+  ) {
+    return this.postsService.deleteOneById(id, post);
   }
 }

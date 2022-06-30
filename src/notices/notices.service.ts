@@ -11,11 +11,13 @@ export class NoticesService {
     private readonly notiecesRepository: Repository<Notice>,
   ) {}
 
+  // 유저의 알림 목록 조회
   async getAllOfUser(
     user: string,
     page: number = 1,
     size: number = 5,
   ): Promise<SelectNoticesDto> {
+    
     const notices = await this.notiecesRepository.find({
       where: {
         user,
