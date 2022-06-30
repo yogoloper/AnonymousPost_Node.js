@@ -1,6 +1,6 @@
 import { ApiResponseProperty } from '@nestjs/swagger';
 import { SelectPostDto } from './select-post.dto';
-import { Post } from '../../post.entity';
+import { Post } from '../../entities/post.entity';
 
 export class SelectPostsDto {
   @ApiResponseProperty()

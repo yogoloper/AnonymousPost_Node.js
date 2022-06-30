@@ -1,4 +1,4 @@
-import { Comment } from '../comments/comment.entity';
+import { Comment } from '../../comments/entities/comment.entity';
 import {
   BaseEntity,
   Column,
@@ -23,11 +23,10 @@ export class Post extends BaseEntity {
   @Column()
   author: string;
 
-  @Column({ select: false })
+  @Column()
   password: string;
 
   @Column({
-    select: false,
     default: 0, // 0:정상, 1: 삭제
   })
   status: number;

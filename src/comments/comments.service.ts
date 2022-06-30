@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Comment } from './comment.entity';
+import { Comment } from './entities/comment.entity';
 import { Repository } from 'typeorm';
 import { CreateCommentDto } from './dto/request/create-comment.dto';
 import { CreatedCommentDto } from './dto/response/created-comment.dto';
-import { Post } from '../posts/post.entity';
+import { Post } from '../posts/entities/post.entity';
 import { SelectCommentsDto } from './dto/response/select-comments.dto';
 
 @Injectable()
