@@ -24,8 +24,9 @@ export class PostsController {
   getAll(
     @Query('page') page: number,
     @Query('size') size: number,
+    @Query('search') search: string,
   ): Promise<SelectPostsDto> {
-    return this.postsService.getAll(page, size);
+    return this.postsService.getAll(page, size, search);
   }
 
   @Get('/:id')

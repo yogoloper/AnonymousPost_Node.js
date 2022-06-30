@@ -14,11 +14,19 @@ export class PostsService {
     @InjectRepository(Post) private readonly postsRepository: Repository<Post>,
   ) {}
 
-  async getAll(page: number = 1, size: number = 5): Promise<SelectPostsDto> {
-    const posts = await this.postsRepository.find({
-      take: size,
-      skip: size * (page - 1),
-    });
+  async getAll(
+    page: number = 1,
+    size: number = 5,
+    search?,
+  ): Promise<SelectPostsDto> {
+    const posts = await this.postsRepository
+      .createQueryBuilder()
+      .take(size)
+      .skip(size * (page - 1))
+      .where('title like :search', { search: `%${search}%` })
+      .orWhere('author like :search', { search: `%${search}%` })
+      .getMany();
+
     return new SelectPostsDto(posts);
   }
 
