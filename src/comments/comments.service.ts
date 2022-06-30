@@ -6,6 +6,8 @@ import { CreateCommentDto } from './dto/request/create-comment.dto';
 import { CreatedCommentDto } from './dto/response/created-comment.dto';
 import { Post } from '../posts/entities/post.entity';
 import { SelectCommentsDto } from './dto/response/select-comments.dto';
+import { Keyword } from 'src/keywords/entities/keyword.entity';
+import { Notice } from '../notices/entities/notice.entity';
 
 @Injectable()
 export class CommentsService {
@@ -14,6 +16,10 @@ export class CommentsService {
     private readonly commentsRepository: Repository<Comment>,
     @InjectRepository(Post)
     private readonly postsRepository: Repository<Post>,
+    @InjectRepository(Keyword)
+    private readonly keywordsRepository: Repository<Keyword>,
+    @InjectRepository(Notice)
+    private readonly notiecesRepository: Repository<Notice>,
   ) {}
 
   async getAll(
@@ -45,6 +51,7 @@ export class CommentsService {
     comment: CreateCommentDto,
   ): Promise<CreatedCommentDto> {
     const post = await this.postsRepository.findOneByOrFail({ id: postId });
+    const keywords = await this.keywordsRepository.find();
 
     // 댓글의 그룹
     const query = await this.commentsRepository.createQueryBuilder('comment');
@@ -53,13 +60,24 @@ export class CommentsService {
     const { maxGroup } = await query.getRawOne();
 
     const newComment = this.commentsRepository.create({
-      content: comment.content,
-      author: comment.author,
+      ...comment,
       post: post,
       parent: null,
       group: maxGroup + 1,
     });
     await this.commentsRepository.save(newComment);
+
+    keywords.forEach((element) => {
+      if (newComment.content.indexOf(element.keyword) != -1) {
+        const notice = this.notiecesRepository.create({
+          ...element,
+          refId: newComment.id,
+          type: 1,
+        });
+        this.notiecesRepository.save(notice);
+      }
+    });
+
     return new CreatedCommentDto(newComment.id);
   }
 
@@ -70,6 +88,7 @@ export class CommentsService {
   ): Promise<CreatedCommentDto> {
     const post = await this.postsRepository.findOneByOrFail({ id: postId });
     const parentComment = await this.commentsRepository.findOneByOrFail({ id });
+    const keywords = await this.keywordsRepository.find();
 
     const query = await this.commentsRepository.createQueryBuilder('comment');
     query
@@ -91,8 +110,7 @@ export class CommentsService {
       .execute();
 
     const newComment = this.commentsRepository.create({
-      content: comment.content,
-      author: comment.author,
+      ...comment,
       post: post,
       parent: parentComment,
       group: parentComment.group,
@@ -100,6 +118,19 @@ export class CommentsService {
       groupOrder: maxOrder + 1,
     });
     await this.commentsRepository.save(newComment);
+
+    keywords.forEach((element) => {
+      if (
+        newComment.content.indexOf(element.keyword) != -1
+      ) {
+        const notice = this.notiecesRepository.create({
+          ...element,
+          refId: newComment.id,
+          type: 1,
+        });
+        this.notiecesRepository.save(notice);
+      }
+    });
     return new CreatedCommentDto(newComment.id);
   }
 }

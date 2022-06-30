@@ -8,11 +8,17 @@ import { SelectPostDto } from './dto/response/select-post.dto';
 import { SelectPostsDto } from './dto/response/select-posts.dto';
 import { UpdatePostDto } from './dto/request/update-post.dto';
 import { query } from 'express';
+import { Keyword } from 'src/keywords/entities/keyword.entity';
+import { Notice } from 'src/notices/entities/notice.entity';
 
 @Injectable()
 export class PostsService {
   constructor(
     @InjectRepository(Post) private readonly postsRepository: Repository<Post>,
+    @InjectRepository(Keyword)
+    private readonly keywordsRepository: Repository<Keyword>,
+    @InjectRepository(Notice)
+    private readonly notiecesRepository: Repository<Notice>,
   ) {}
 
   async getAll(
@@ -49,7 +55,25 @@ export class PostsService {
 
   async createOne(post: CreatePostDto): Promise<CreatedPostDto> {
     const newPost = this.postsRepository.create(post);
+
+    const keywords = await this.keywordsRepository.find();
+
     await this.postsRepository.save(newPost);
+
+    keywords.forEach((element) => {
+      if (
+        newPost.title.indexOf(element.keyword) != -1 ||
+        newPost.content.indexOf(element.keyword) != -1
+      ) {
+        const notice = this.notiecesRepository.create({
+          ...element,
+          refId: newPost.id,
+          type: 0,
+        });
+        this.notiecesRepository.save(notice);
+      }
+    });
+
     return new CreatedPostDto(newPost.id);
   }
 
