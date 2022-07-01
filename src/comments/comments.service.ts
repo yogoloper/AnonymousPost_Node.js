@@ -137,7 +137,7 @@ export class CommentsService {
 
     // 부모 댓글 조회
     const parentComment = await this.commentsRepository.findOne({
-      where: { id },
+      where: { id, postId },
     });
 
     if (!parentComment) {
