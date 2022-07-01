@@ -14,18 +14,22 @@ export const PostsSwagger = {
     query: {
       page: {
         name: 'page',
+        description: '페이징 번호',
         type: 'number',
         example: 1,
         required: false,
       },
       size: {
         name: 'size',
+        description: '페이징 크기',
         type: 'number',
         example: 5,
         required: false,
       },
       search: {
         name: 'search',
+        description: '검색어(제목/작성자)',
+        example:'제목',
         type: 'string',
         required: false,
       },
@@ -46,6 +50,7 @@ export const PostsSwagger = {
     param: {
       id: {
         name: 'id',
+        description: '게시물 아이디',
         type: 'number',
         required: true,
         example: 1,
@@ -89,6 +94,7 @@ export const PostsSwagger = {
     param: {
       id: {
         name: 'id',
+        description: '게시물 아이디',
         type: 'number',
         required: true,
         example: 1,
@@ -122,6 +128,7 @@ export const PostsSwagger = {
     param: {
       id: {
         name: 'id',
+        description: '게시물 아이디',
         type: 'number',
         required: true,
         example: 1,

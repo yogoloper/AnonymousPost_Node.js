@@ -17,6 +17,7 @@ import { SelectPostsDto } from './dto/response/select-posts.dto';
 import { UpdatePostDto } from './dto/request/update-post.dto';
 import {
   ApiBody,
+  ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
@@ -57,7 +58,7 @@ export class PostsController {
   @Post('/')
   @ApiOperation(PostsSwagger.createOne.operation)
   @ApiBody(PostsSwagger.createOne.body.post)
-  @ApiOkResponse(PostsSwagger.createOne.response[201])
+  @ApiCreatedResponse(PostsSwagger.createOne.response[201])
   createOne(@Body() post: CreatePostDto): Promise<CreatedPostDto> {
     return this.postsService.createOne(post);
   }

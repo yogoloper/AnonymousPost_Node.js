@@ -7,7 +7,7 @@ export class UpdatePostDto {
   @ApiProperty({ type: 'string', example: '내용' })
   readonly content: string;
 
-  @ApiProperty({ type: 'string', example: '사용자' })
+  @ApiProperty({ type: 'string', example: '작성자' })
   readonly author: string;
 
   @ApiProperty({ type: 'string', example: '1234' })
