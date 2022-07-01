@@ -79,8 +79,16 @@ export class PostsService {
       newPost = this.postsRepository.create(post);
       await this.postsRepository.save(newPost);
 
+      const author = newPost.author;
       // 알림 목록 저장
-      keywords = await this.keywordsRepository.find();
+      keywords = await this.keywordsRepository
+        .createQueryBuilder('keyword')
+        .select()
+        .where('user != :author', { author })
+        .getMany();
+
+      console.log(keywords);
+
       keywords.forEach((element) => {
         if (
           newPost.title.indexOf(element.keyword) != -1 ||

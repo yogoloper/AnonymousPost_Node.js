@@ -95,8 +95,14 @@ export class CommentsService {
       });
       await this.commentsRepository.save(newComment);
 
+      const author = newComment.author;
       // 알림 목록 저장
-      const keywords = await this.keywordsRepository.find();
+      const keywords = await this.keywordsRepository
+        .createQueryBuilder('keyword')
+        .select()
+        .where('user != :author', { author })
+        .getMany();
+
       keywords.forEach((element) => {
         if (newComment.content.indexOf(element.keyword) != -1) {
           const notice = this.notiecesRepository.create({
@@ -181,8 +187,14 @@ export class CommentsService {
       });
       await this.commentsRepository.save(newComment);
 
+      const author = newComment.author;
       // 알림 목록 저장
-      const keywords = await this.keywordsRepository.find();
+      const keywords = await this.keywordsRepository
+        .createQueryBuilder('keyword')
+        .select()
+        .where('user != :author', { author })
+        .getMany();
+
       keywords.forEach((element) => {
         if (newComment.content.indexOf(element.keyword) != -1) {
           const notice = this.notiecesRepository.create({
