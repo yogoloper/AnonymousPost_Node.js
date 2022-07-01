@@ -3,7 +3,7 @@ import { SelectPostDto } from './select-post.dto';
 import { Post } from '../../entities/post.entity';
 
 export class SelectPostsDto {
-  @ApiResponseProperty()
+  @ApiResponseProperty({ type: SelectPostsDto })
   posts: SelectPostDto[];
 
   constructor(posts: Post[]) {

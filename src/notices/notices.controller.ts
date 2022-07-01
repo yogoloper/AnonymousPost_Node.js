@@ -1,7 +1,9 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { NoticesService } from './notices.service';
 import { SelectNoticesDto } from './dto/response/select-notices.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Notice API')
 @Controller('notices')
 export class NoticesController {
   constructor(private readonly noticesService: NoticesService) {}

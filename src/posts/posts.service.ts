@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -123,7 +124,7 @@ export class PostsService {
 
     // 비밀번호 불일치 예외처리
     if (orgPost.password != post.password) {
-      throw new UnauthorizedException({
+      throw new ForbiddenException({
         errorNo: 'P0004',
         message: '해당 게시물에 대한 수정 권한이 없습니다.',
       });
@@ -164,7 +165,7 @@ export class PostsService {
 
     // 비밀번호 불일치 예외처리
     if (orgPost.password != post.password) {
-      throw new UnauthorizedException({
+      throw new ForbiddenException({
         errorNo: 'P0007',
         message: '해당 게시물에 대한 삭제 권한이 없습니다.',
       });
